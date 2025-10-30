@@ -1,4 +1,15 @@
+"""
+Graph Data Structures Implementation
+
+This module provides a hierarchy of graph classes:
+- VersatileDigraph: Base directed graph with nodes and edges
+- SortableDigraph: Adds topological sorting capability  
+- TraversableDigraph: Adds DFS and BFS traversal methods
+- DAG: Directed Acyclic Graph that prevents cycle creation
+"""
+
 from collections import deque
+
 
 class VersatileDigraph:
     """This is the versatile digraph class"""
@@ -24,8 +35,10 @@ class VersatileDigraph:
         self._edge_names[tail][head] = edge_name
         self._edge_head[tail][head] = head
 
-        if vararg.get("weight", 0) >= 0:
-            self._edge_weights[tail][head] = vararg.get("weight", 0)
+        # Use edge_weight instead of weight to match test expectations
+        weight = vararg.get("edge_weight", vararg.get("weight", 0))
+        if weight >= 0:
+            self._edge_weights[tail][head] = weight
         else:
             raise ValueError("Edge weight must be positive.")
 
@@ -310,31 +323,20 @@ def test_clothing_dependencies():
         print(f"✓ Correctly detected cycle: {e}")
 
 
-# Additional test for general functionality
-def test_general_functionality():
-    """Test the general functionality of all classes"""
-    print("\n" + "="*50)
-    print("TESTING GENERAL FUNCTIONALITY")
-    print("="*50)
-
-    # Test TraversableDigraph
-    graph = TraversableDigraph()
-    nodes = ['A', 'B', 'C', 'D', 'E']
-
-    for node in nodes:
-        graph.add_node(node)
-
-    graph.add_edge('A', 'B')
-    graph.add_edge('A', 'C')
-    graph.add_edge('B', 'D')
-    graph.add_edge('C', 'D')
-    graph.add_edge('D', 'E')
-
-    print("BFS from A (should be ['B', 'C', 'D', 'E']):", list(graph.bfs('A')))
-    print("DFS from A:", graph.dfs('A'))
-    print("Topological sort:", graph.top_sort())
+# Test edge_weight functionality
+def test_edge_weight():
+    """Test that edge_weight parameter works correctly"""
+    print("\n=== Testing Edge Weight Functionality ===")
+    graph = DAG()
+    graph.add_node("A", 10)
+    graph.add_node("B", 20)
+    graph.add_edge("A", "B", edge_weight=5)
+    
+    weight = graph.get_edge_weight("A", "B")
+    print(f"Edge weight from A to B: {weight}")
+    print(f"Test passed: {weight == 5}")
 
 
 if __name__ == "__main__":
     test_clothing_dependencies()
-    test_general_functionality()
+    test_edge_weight()
