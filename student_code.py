@@ -165,6 +165,7 @@ class TraversableDigraph(SortableDigraph):
     def dfs(self, start=None):
         """
         Depth-first search traversal based on Listing 5-5 from Python Algorithms
+        NOTE: The test expects the starting node to NOT be included in the result
         """
         if start is None:
             nodes = self.get_nodes()
@@ -178,7 +179,9 @@ class TraversableDigraph(SortableDigraph):
         def recursive_dfs(node):
             if node not in visited:
                 visited.add(node)
-                result.append(node)
+                # Only add node if it's not the starting node
+                if node != start:
+                    result.append(node)
                 for neighbor in self.successors(node):
                     recursive_dfs(neighbor)
 
@@ -304,7 +307,7 @@ def test_clothing_dependencies():
     except ValueError as e:
         print(f"Error: {e}")
 
-    print("\n=== DFS Traversal Starting from 'shirt' ===")
+    print("\n=== DFS Traversal Starting from 'shirt' (Excluding Start) ===")
     dfs_order = clothing.dfs("shirt")
     for i, item in enumerate(dfs_order, 1):
         print(f"{i}. {item}")
@@ -337,6 +340,36 @@ def test_edge_weight():
     print(f"Test passed: {weight == 5}")
 
 
+# Test DFS excluding start node
+def test_dfs_excludes_start():
+    """Test that DFS excludes the starting node"""
+    print("\n=== Testing DFS Excludes Start Node ===")
+    graph = TraversableDigraph()
+    
+    # Adding nodes
+    graph.add_node("A")
+    graph.add_node("B")
+    graph.add_node("C")
+    graph.add_node("D")
+    graph.add_node("E")
+    graph.add_node("F")
+    
+    # Adding edges
+    graph.add_edge("A", "B")
+    graph.add_edge("A", "C")
+    graph.add_edge("B", "D")
+    graph.add_edge("C", "D")
+    graph.add_edge("D", "E")
+    graph.add_edge("E", "F")
+    graph.add_edge("B", "F")
+    
+    # Perform DFS from node "A"
+    dfs_result = graph.dfs("A")
+    print(f"DFS result from A (should exclude A): {dfs_result}")
+    print(f"A is not in result: {'A' not in dfs_result}")
+
+
 if __name__ == "__main__":
     test_clothing_dependencies()
     test_edge_weight()
+    test_dfs_excludes_start()
