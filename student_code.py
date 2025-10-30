@@ -3,7 +3,7 @@ Graph Data Structures Implementation
 
 This module provides a hierarchy of graph classes:
 - VersatileDigraph: Base directed graph with nodes and edges
-- SortableDigraph: Adds topological sorting capability  
+- SortableDigraph: Adds topological sorting capability
 - TraversableDigraph: Adds DFS and BFS traversal methods
 - DAG: Directed Acyclic Graph that prevents cycle creation
 """
@@ -193,7 +193,7 @@ class TraversableDigraph(SortableDigraph):
         Breadth-first search traversal that yields nodes
         Based on Listing 5-6 (General Graph Traversal) from Python Algorithms
         Uses deque for efficiency
-        
+
         NOTE: The test expects the starting node to NOT be included in the result
         """
         if start is None:
@@ -320,7 +320,7 @@ def test_clothing_dependencies():
     # Test cycle detection
     print("\n=== Testing Cycle Detection ===")
     try:
-        clothing.add_edge("jacket", "shirt")  # This should create a cycle
+        clothing.add_edge("jacket", "shirt")
         print("ERROR: Cycle was not detected!")
     except ValueError as e:
         print(f"✓ Correctly detected cycle: {e}")
@@ -334,7 +334,7 @@ def test_edge_weight():
     graph.add_node("A", 10)
     graph.add_node("B", 20)
     graph.add_edge("A", "B", edge_weight=5)
-    
+
     weight = graph.get_edge_weight("A", "B")
     print(f"Edge weight from A to B: {weight}")
     print(f"Test passed: {weight == 5}")
@@ -345,7 +345,7 @@ def test_dfs_excludes_start():
     """Test that DFS excludes the starting node"""
     print("\n=== Testing DFS Excludes Start Node ===")
     graph = TraversableDigraph()
-    
+
     # Adding nodes
     graph.add_node("A")
     graph.add_node("B")
@@ -353,7 +353,7 @@ def test_dfs_excludes_start():
     graph.add_node("D")
     graph.add_node("E")
     graph.add_node("F")
-    
+
     # Adding edges
     graph.add_edge("A", "B")
     graph.add_edge("A", "C")
@@ -362,7 +362,7 @@ def test_dfs_excludes_start():
     graph.add_edge("D", "E")
     graph.add_edge("E", "F")
     graph.add_edge("B", "F")
-    
+
     # Perform DFS from node "A"
     dfs_result = graph.dfs("A")
     print(f"DFS result from A (should exclude A): {dfs_result}")
